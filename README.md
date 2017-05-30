@@ -35,9 +35,11 @@ Usage
 >Downloading and converting videos2mp3 made SIMPLE!
 
 > **positional arguments:**
-  Name            Put the name of the song and/or artist here
+  Name            Put the name of the song and/or artist like so: "name
+                        of song"
 
 > **optional arguments:**
 >  -h, --help            show this help message and exit
  > -s SIZE, --size SIZE            How many options to show for download, (Default = 10)
 >  -a, --auto            Run the script Automatic without asking for an option
+>  -u, --url             Download custom URL to high quality mp3, NOTE: Pass URL instead of name
