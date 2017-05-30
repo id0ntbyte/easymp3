@@ -4,9 +4,9 @@
 Add read from text file ability 
 Add argument for showing longer results list  ✅
 Add safeguards for the input ✅
-Add ability to pick output file name
 Add download Audio or Video option
 Add Automode (download without asking which one)✅
+Add Download specific URL ✅
 """
 import sys, os, webbrowser, requests, youtube_dl, argparse
 from bs4 import BeautifulSoup
@@ -34,12 +34,18 @@ ydl_opts = {
     'logger': MyLogger(),
     'progress_hooks': [my_hook],
 }
-
+def just_download(url):
+	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+		ydl.download([url])
+	
+	
+	
 #CONDITIONS
 parser = argparse.ArgumentParser(description='Downloading and converting videos2mp3 made SIMPLE!')
-parser.add_argument("Name", help="Put the name of the song and/or artist here")
+parser.add_argument("Name", help='Put the name of the song and/or artist like so: "name of song"')
 parser.add_argument("-s", "--size", type=int, help="How many options to show for download, (Default = 10)")
 parser.add_argument("-a", "--auto", action="store_true", help="Run the script Automatic without asking for an option")
+parser.add_argument("-u", "--url", action="store_true", help="Download custom URL to high quality mp3, NOTE: Pass URL instead of name")
 args = parser.parse_args()
 if args.size:
 	list_size = args.size
@@ -49,6 +55,10 @@ if args.Name:
 	get_input = args.Name
 if args.auto:
 	run_auto = 1
+elif args.auto is not 1:
+	run_auto = 0
+if args.url:
+	just_download(args.Name)
 
 #-----------------------------------------------------------------
 query = quote(get_input)
