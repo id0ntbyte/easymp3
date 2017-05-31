@@ -1,12 +1,7 @@
 #!/usr/bin/env python
-
 """
-Add read from text file ability 
-Add argument for showing longer results list  ✅
-Add safeguards for the input ✅
-Add download Audio or Video option
-Add Automode (download without asking which one)✅
-Add Download specific URL ✅
+Created by S1mplyCompl3x
+https://github.com/S1mplyCompl3x
 """
 import sys, os, webbrowser, requests, youtube_dl, argparse
 from bs4 import BeautifulSoup
@@ -37,15 +32,31 @@ ydl_opts = {
 def just_download(url):
 	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 		ydl.download([url])
-	
-	
+
+def download_from_file(name):
+	with open(name) as f:
+		lines = f.readlines()
+	for i in lines:
+		query = quote(i)
+		list = []
+		res = requests.get('https://youtube.com/results?search_query=' + query)
+		soup = BeautifulSoup(res.text, "html.parser")
+		for index, vid in enumerate(soup.findAll(attrs={'class' : 'yt-uix-tile-link'})[:2]):
+			temp_url = 'https://youtube.com' + vid['href']
+			list.insert((index), temp_url)
+		print("Downloading: " + vid['title'] + "\n")
+		url = list[1]
+		with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+			ydl.download([url])
+	exit()
 	
 #CONDITIONS
 parser = argparse.ArgumentParser(description='Downloading and converting videos2mp3 made SIMPLE!')
 parser.add_argument("Name", help='Put the name of the song and/or artist like so: "name of song"')
 parser.add_argument("-s", "--size", type=int, help="How many options to show for download, (Default = 10)")
 parser.add_argument("-a", "--auto", action="store_true", help="Run the script Automatic without asking for an option")
-parser.add_argument("-u", "--url", action="store_true", help="Download custom URL to high quality mp3, NOTE: Pass URL instead of name")
+parser.add_argument("-u", "--url", action="store_true", help="Download custom URL to high quality mp3, NOTE: Pass URL for the Name variable")
+parser.add_argument("-o", "--open", action="store_true", help="Open text file and download all songs seperated by line break, NOTE: Pass the file name for the Name variable, put TEXT file in the same folder as script")
 args = parser.parse_args()
 if args.size:
 	list_size = args.size
@@ -59,7 +70,8 @@ elif args.auto is not 1:
 	run_auto = 0
 if args.url:
 	just_download(args.Name)
-
+if args.open:
+	download_from_file(args.Name)
 #-----------------------------------------------------------------
 query = quote(get_input)
 res = requests.get('https://youtube.com/results?search_query=' + query)
@@ -86,4 +98,3 @@ elif run_auto == 1:
 	url = list[1]
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 	ydl.download([url])
-
