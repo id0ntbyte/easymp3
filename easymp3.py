@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Created by S1mplyCompl3x
-https://github.com/S1mplyCompl3x
+Created by id0ntByte
+https://github.com/id0ntByte
 """
 import sys, os, webbrowser, requests, youtube_dl, argparse
 from bs4 import BeautifulSoup
